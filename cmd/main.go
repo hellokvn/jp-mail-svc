@@ -6,7 +6,6 @@ import (
 	"log"
 
 	"github.com/hellokvn/jp-mail-svc/pkg/config"
-	"github.com/hellokvn/jp-mail-svc/pkg/db"
 	"github.com/hellokvn/jp-mail-svc/pkg/services"
 	"github.com/streadway/amqp"
 )
@@ -17,14 +16,17 @@ type Message struct {
 }
 
 func main() {
-	config, err := config.LoadConfig()
+	c, err := config.LoadConfig()
 
-	h := db.Init(config.DBUrl)
-	s := services.Server{
-		H: h,
+	if err != nil {
+		panic(err)
 	}
 
-	connectRabbitMQ, err := amqp.Dial(config.AMQPUrl)
+	s := services.Server{
+		C: c,
+	}
+
+	connectRabbitMQ, err := amqp.Dial(c.AMQPUrl)
 
 	if err != nil {
 		panic(err)
@@ -70,7 +72,7 @@ func main() {
 
 			switch message.Type {
 			case "send_mail":
-				s.SendMail(b)
+				s.SendMail(&b)
 			default:
 				fmt.Println("Invalid message type")
 			}

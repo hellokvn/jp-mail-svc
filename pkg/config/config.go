@@ -3,9 +3,13 @@ package config
 import "github.com/spf13/viper"
 
 type Config struct {
-	Port    string `mapstructure:"PORT"`
-	DBUrl   string `mapstructure:"DB_URL"`
-	AMQPUrl string `mapstructure:"AMQP_URL"`
+	DBUrl        string `mapstructure:"DB_URL"`
+	AMQPUrl      string `mapstructure:"AMQP_URL"`
+	MailHost     string `mapstructure:"MAIL_HOST"`
+	MailUser     string `mapstructure:"MAIL_USER"`
+	MailPassword string `mapstructure:"MAIL_PASSWORD"`
+	MailPort     string `mapstructure:"MAIL_PORT"`
+	MailFrom     string `mapstructure:"MAIL_FROM"`
 }
 
 func LoadConfig() (config Config, err error) {
